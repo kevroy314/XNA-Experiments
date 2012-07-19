@@ -119,6 +119,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Campfire.cs" />
     <Compile Include="Particle Systems\FirePS.cs" />
     <Compile Include="Particle Systems\DefaultTexturedQuadParticleSystemTemplate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

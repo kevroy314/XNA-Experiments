@@ -27,10 +27,9 @@ namespace Tutorial_1
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        Texture2D logs;
+        Campfire fire;
 
-        // Declare our Particle System variable
-		FireParticleSystem mcParticleSystem = null;
+        
 
 		Vector3 cameraPosition = new Vector3(0, 50, -200);
 
@@ -65,12 +64,7 @@ namespace Tutorial_1
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
-            logs = Content.Load<Texture2D>("logs");
-
-            // Declare a new Particle System instance and Initialize it
-            mcParticleSystem = new FireParticleSystem(this);
-            mcParticleSystem.AutoInitialize(this.GraphicsDevice, this.Content, null);
+            fire = new Campfire(this);
         }
 
         /// <summary>
@@ -80,10 +74,7 @@ namespace Tutorial_1
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
-
-
-            // Destroy the Particle System
-            mcParticleSystem.Destroy();
+            fire.UnloadContent();
         }
 
         /// <summary>
@@ -100,9 +91,7 @@ namespace Tutorial_1
             // TODO: Add your update logic here
 
 
-            // Update the Particle System
-			mcParticleSystem.CameraPosition = cameraPosition;
-            mcParticleSystem.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            fire.Update(gameTime,cameraPosition);
 
 
             base.Update(gameTime);
@@ -118,23 +107,8 @@ namespace Tutorial_1
 
             // TODO: Add your drawing code here
 
-            // Set up the Camera's View matrix
-			Matrix sViewMatrix = Matrix.CreateLookAt(cameraPosition, new Vector3(0, 0, 0), Vector3.Up);
 
-            // Setup the Camera's Projection matrix by specifying the field of view (1/4 pi), aspect ratio, and the near and far clipping planes
-            Matrix sProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)GraphicsDevice.Viewport.Width / (float)GraphicsDevice.Viewport.Height, 1, 10000);
-
-
-            // Draw the Particle System
-            mcParticleSystem.SetWorldViewProjectionMatrices(Matrix.Identity, sViewMatrix, sProjectionMatrix);
-
-            Vector2 scale = new Vector2(0.5f,0.45f);
-            spriteBatch.Begin();
-            spriteBatch.Draw(logs, new Vector2(GraphicsDevice.Viewport.Width / 2 - ((logs.Bounds.Width / 2) * scale.X), GraphicsDevice.Viewport.Height / 2 - ((logs.Bounds.Height / 2) * scale.Y)), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0);
-            spriteBatch.End();
-
-            mcParticleSystem.Draw();
-
+            fire.Draw(spriteBatch, cameraPosition);
 
             base.Draw(gameTime);
         }
